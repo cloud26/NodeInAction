@@ -28,14 +28,18 @@ channel.on('leave', function(id) {
 
 channel.on('shutdown', function() {
     channel.emit('broadcast', '', "Chat has shut down.\n");
-    channel.process.removeAllListeners('broadcast');
+    channel.removeAllListeners('broadcast');
 });
 
 var server = net.createServer(function(client) {
     var id = client.remoteAddress + ':' + client.remotePort;
+    
+    channel.emit('join', id, client);
+    /*
     client.on('connect', function() {
         channel.emit('join', id, client);
     });
+    */
     client.on('data', function(data) {
         data = data.toString();
         if (data == "shutdown\r\n") {
