@@ -1,8 +1,8 @@
 /* 
 * @Author: linpp
 * @Date:   2014-11-03 19:39:45
-* @Last Modified by:   linpp
-* @Last Modified time: 2014-11-03 21:26:42
+* @Last Modified by:   cloud26
+* @Last Modified time: 2014-11-03 22:11:13
 */
 
 var photos = [];
@@ -50,6 +50,19 @@ exports.submit = function(dir){
 				if(err)	return next(err);
 				res.redirect('/');
 			});
+		});
+	};
+};
+
+exports.download = function(dir){
+	return function(req, res, next){
+		var id = req.params.id;
+		//var idx = req.params.idx;
+		//console.log(idx);
+		Photo.findById(id, function(err, photo){
+			if(err) return next(err);
+			var path = join(dir, photo.path);
+			res.download(path);
 		});
 	};
 };
