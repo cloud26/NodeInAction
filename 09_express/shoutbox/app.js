@@ -4,10 +4,16 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var session = require('express-session');
+
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var register = require('./routes/register');
+var login = require('./routes/login');
+var user = require('./lib/middleware/user');
+var messages = require('./lib/messages');
 var app = express();
 
 // view engine setup
@@ -18,13 +24,18 @@ app.set('view engine', 'ejs');
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride());
 app.use(cookieParser());
+app.use(session({secret: 'keyboard cat'}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(user);
+app.use(messages);
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/register', register);
+app.use('/', register);
+app.use('/', login);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
