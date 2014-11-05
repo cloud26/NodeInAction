@@ -1,6 +1,6 @@
-<% if(locals.messages){ %>
+<% if(locals.messages.length != 0){ %>
 <% 	messages.forEach(function(message){ %>
 		<p class='<%= message.type %>'><%= message.string %></p>
-<%  })%>
-<%  removeMessages()%>
-<% }%>
+<%  }) %>
+<%  removeMessages() %>
+<% } %>
